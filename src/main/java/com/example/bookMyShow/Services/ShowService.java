@@ -3,6 +3,8 @@ package com.example.bookMyShow.Services;
 
 import com.example.bookMyShow.Dtos.RequestDto.ShowRequestDto;
 import com.example.bookMyShow.Dtos.RequestDto.ShowSeatRequestDto;
+import com.example.bookMyShow.Dtos.RequestDto.ShowTimeRequestDto;
+import com.example.bookMyShow.Dtos.ResponseDto.ShowTimeResponseDto;
 import com.example.bookMyShow.Enums.SeatType;
 import com.example.bookMyShow.Exception.MovieNotFound;
 import com.example.bookMyShow.Exception.TheaterNotFound;
@@ -14,6 +16,7 @@ import com.example.bookMyShow.Transformers.ShowTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -106,6 +109,32 @@ public class ShowService {
         return movieRepository.findById(movieId).get().getName();
 
 
+    }
+
+    public ShowTimeResponseDto getShowTime(ShowTimeRequestDto showTimeRequestDto) {
+
+        int movieId = movieRepository.findByName(showTimeRequestDto.getMovieName()).getId();
+        int theaterId = theaterRepository.findByLocation(showTimeRequestDto.getTheaterLocation()).getId();
+
+
+        List<String> showTimeList = showRepository.getShowTime(movieId,theaterId);
+
+        ShowTimeResponseDto showTimeResponseDto = new ShowTimeResponseDto();
+        showTimeResponseDto.setName(showTimeList);
+
+        return showTimeResponseDto;
+
+    }
+
+    public List<String> getTheaterList(String showTime) {
+
+        List<Show> showList = showRepository.findByShowTime(showTime);
+        List<String> theaterNameList = new ArrayList<>();
+
+        for(Show show: showList)
+            theaterNameList.add("Theater Name : "+show.getTheater().getName()+", Location : "+show.getTheater().getLocation());
+
+        return theaterNameList;
     }
 
 }

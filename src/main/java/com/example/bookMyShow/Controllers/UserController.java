@@ -1,6 +1,7 @@
 package com.example.bookMyShow.Controllers;
 
 import com.example.bookMyShow.Dtos.RequestDto.UserRequestDto;
+import com.example.bookMyShow.Dtos.ResponseDto.TicketResponseDto;
 import com.example.bookMyShow.Dtos.ResponseDto.UserResponseDto;
 import com.example.bookMyShow.Exception.UserNotFound;
 import com.example.bookMyShow.Models.User;
@@ -53,6 +54,11 @@ public class UserController {
     @GetMapping("/findUsersGreaterThanAge")
     public List<UserResponseDto> getAllUsers(@RequestParam("age")Integer age){
         return userService.getAllUserGreaterThan(age);
+    }
+
+    @GetMapping("/getAllTicketByUser")
+    public List<TicketResponseDto> getAllTicketByUser(@RequestParam("id")Integer id){
+        return userService.getAllTicketByUser(id);
     }
 
 }

@@ -84,4 +84,8 @@ public class TheaterService {
         return "Theater Seats have been successfully added";
     }
 
+    public int getCountByTheater(String theaterName) {
+        return theaterRepository.getCountByName(theaterName);
+    }
+
 }

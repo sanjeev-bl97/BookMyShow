@@ -6,10 +6,7 @@ import com.example.bookMyShow.Services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/ticket")
@@ -18,7 +15,7 @@ public class TicketController {
     @Autowired
     TicketService ticketService;
 
-    @PostMapping("/book-ticket")
+    @PostMapping("/bookTicket")
     public ResponseEntity<TicketResponseDto> bookTicket(@RequestBody TicketRequestDto ticketRequestDto) {
         try {
             TicketResponseDto response = ticketService.bookTicket(ticketRequestDto);
@@ -29,6 +26,12 @@ public class TicketController {
             ticketResponseDto.setResponseMessage(e.getMessage());
             return new ResponseEntity<>(ticketResponseDto, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @DeleteMapping("/cancelTicket")
+    public ResponseEntity<String> cancelTicket(@RequestBody Integer id) {
+       ticketService.cancelTicket(id);
+        return new ResponseEntity<>("Ticket Cancelled Successfully",HttpStatus.OK);
     }
 
 }

@@ -84,7 +84,7 @@ public class TicketService {
                 +"Enjoy the Show !!!";
 
         simpleMessageMail.setSubject("Ticket Confirmation Mail");
-        simpleMessageMail.setFrom("springacciojob@gmail.com");
+        simpleMessageMail.setFrom("pwspbl@gmail.com");
         simpleMessageMail.setText(body);
         simpleMessageMail.setTo(user.getEmailId());
 
@@ -121,6 +121,27 @@ public class TicketService {
         return cost;
     }
 
+    public void cancelTicket(Integer id) {
 
+        User user = ticketRepository.findById(id).get().getUser();
+        Show show = ticketRepository.findById(id).get().getShow();
+        ticketRepository.deleteById(id);
+
+        //We can send a mail to the person
+        SimpleMailMessage simpleMessageMail = new SimpleMailMessage();
+
+        String body = "Hi "+user.getName()+" ! \n"+
+                "You have successfully cancelled the ticket.\n"
+                +"Movie Name: " + show.getMovie().getName()+"\n"
+                +"show Date is:  "+show.getShowDate()+"\n"
+                +"And show time is: "+show.getShowTime();
+
+        simpleMessageMail.setSubject("Ticket Cancellation");
+        simpleMessageMail.setFrom("pwspbl@gmail.com");
+        simpleMessageMail.setText(body);
+        simpleMessageMail.setTo(user.getEmailId());
+
+        javaMailSender.send(simpleMessageMail);
+    }
 
 }

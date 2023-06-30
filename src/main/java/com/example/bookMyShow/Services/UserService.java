@@ -1,10 +1,13 @@
 package com.example.bookMyShow.Services;
 
 import com.example.bookMyShow.Dtos.RequestDto.UserRequestDto;
+import com.example.bookMyShow.Dtos.ResponseDto.TicketResponseDto;
 import com.example.bookMyShow.Dtos.ResponseDto.UserResponseDto;
 import com.example.bookMyShow.Exception.UserNotFound;
+import com.example.bookMyShow.Models.Ticket;
 import com.example.bookMyShow.Models.User;
 import com.example.bookMyShow.Repository.UserRepository;
+import com.example.bookMyShow.Transformers.TicketTransformer;
 import com.example.bookMyShow.Transformers.UserTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +59,18 @@ public class UserService {
             userResponseDtoList.add(UserTransformer.UserEntityToDto(user));
 
         return userResponseDtoList;
+    }
+
+    public List<TicketResponseDto> getAllTicketByUser(Integer id) {
+        List<TicketResponseDto> ticketResponseDtoList = new ArrayList<>();
+
+        List<Ticket> ticketList = userRepository.findById(id).get().getTicketList();
+
+        for(Ticket ticket: ticketList)
+            ticketResponseDtoList.add(TicketTransformer.createTicketResponseDto(ticket.getShow(),ticket));
+
+        return ticketResponseDtoList;
+
     }
 
 }
